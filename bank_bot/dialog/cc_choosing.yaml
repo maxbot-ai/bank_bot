@@ -1,0 +1,150 @@
+name: cc_choosing
+nodes:
+  - condition: intents.banking_card_selection
+    label: choosing_credit_card
+    slot_filling:
+    - name: cc_type
+      check_for: slot_in_focus and entities.cc_type
+      value: entities.cc_type.value|lower
+      prompt: |
+        I can help you find a credit card to suit your needs.<br />
+        We have credit cards to build credit, provide rewards,<br />
+        and help you save money.
+
+        <quick_replies>
+          <text>What are you looking for most in a credit card?</text>
+          <button>Rewards</button>
+          <button>Increase credit score</button>
+          <button>Save money</button>
+        </quick_replies>
+      found: |
+        {% if not previous_value or previous_value != current_value %}
+
+          {% delete slots.cc_subtype %}
+          {% delete slots.cc_credit_level%}
+
+          {% if slots.cc_type == 'rewards' %}
+
+            {% set slots.cc_credit_level = 'unused' %}
+            {% set slots.aware_about_rewards = true %}
+
+            That's great!
+
+          {% elif slots.cc_type == 'build_credit' %}
+
+            {% set slots.cc_subtype = 'unused' %}
+
+            We have a great range of cards to help you build credit.
+
+          {% elif slots.cc_type == 'saving' %}
+
+            {% set slots.cc_subtype = 'unused' %}
+            {% set slots.cc_credit_level = 'unused' %}
+
+            We have several credit cards with low interest and no fees.
+
+          {% endif %}
+        {% endif %}
+
+    - name: cc_subtype
+      check_for: entities.cc_subtype
+      value: entities.cc_subtype.value|lower
+      prompt: |
+        <quick_replies>
+          <text>
+            We have cash rewards, travel miles or rewards points.<br />
+            Which of these do you prefer?
+          </text>
+          <button>Cash</button>
+          <button>Travel</button>
+          <button>Rewards points</button>
+        </quick_replies>
+
+    - name: cc_credit_level
+      check_for: entities.cc_credit_level or entities.number
+      prompt: |
+        <quick_replies>
+          <text>How would you describe your current credit level?</text>
+          <button>Low</button>
+          <button>Average</button>
+          <button>High</button>
+        </quick_replies>
+
+      found: |
+        {% if entities.number %}
+          {% set credit_level = entities.number.value %}
+
+          {% if credit_level < 300 %}
+            {% set slots.cc_credit_level = 'low' %}
+
+          {% elif credit_level >= 300 and credit_level < 700 %}
+            {% set slots.cc_credit_level = 'average' %}
+
+          {% else %}
+            {% set slots.cc_credit_level = 'high' %}
+
+          {% endif %}
+        {% endif %}
+
+        {% set slots.cc_credit_level = slots.cc_credit_level|lower %}
+
+        {% if slots.cc_credit_level == 'low' %}
+          Not a problem, we have credit cards for all levels of credit.
+
+        {% elif slots.cc_credit_level == 'average' %}
+          Great! We have credit cards for all levels of credit.<br />
+          For average level too.
+
+        {% else %}
+          Great! We have credit cards for all levels of credit.<br />
+          For high level too.
+
+        {% endif %}
+
+    - name: aware_about_rewards
+      prompt: |
+        <quick_replies>
+          <text>Would you be interested in rewards?</text>
+          <button>Yes, sure!</button>
+          <button>No, thanks</button>
+        </quick_replies>
+
+      check_for: slot_in_focus and (intents.yes or intents.no or intents.help_guidance_requested)
+      value: true
+      found: |
+        {% if intents.help_guidance_requested %}
+          {% delete slots.aware_about_rewards  %}
+            Not sure? If you're looking for a card just to keep an eye on credit,<br />
+            you should know cards with rewards systems may have a slightly higher annual fee.
+
+        {% elif intents.yes %}
+            {% delete slots.cc_subtype %}
+        {% endif %}
+
+    slot_handlers:
+      - condition: intents.cancel
+        response: |
+          {% set slots.canceled = true %}
+            ❗Ok, we'll stop there. No credit card choosing will be made.
+            <response />
+
+    response: |
+      {% from 'macro/cc_choosing.jinja' import cc_reward_response %}
+      {% from 'macro/cc_choosing.jinja' import cc_cash_response %}
+      {% from 'macro/cc_choosing.jinja' import cc_saving_response %}
+
+      {% if slots.canceled %}
+        {# Do nothing #}
+
+      {% elif slots.cc_type == 'rewards' %}
+        {{ cc_reward_response(slots.cc_subtype) }}
+
+      {% elif slots.cc_type == 'build_credit' %}
+        {{ cc_cash_response(slots.cc_subtype, slots.cc_credit_level) }}
+
+      {% elif slots.cc_type == 'saving' %}
+        {{ cc_saving_response(slots.cc_subtype) }}
+
+      {% endif %}
+
+      <jump_to node="main_menu" transition="response" />

@@ -1,0 +1,13 @@
+extensions:
+  quick_replies: {}
+  format:
+    locale: en_US
+  datetime:
+    tz: America/New_York
+  jinja_loader: {}
+  rasa:
+    url: http://0.0.0.0:5005
+
+channels:
+  telegram:
+    api_token: !ENV ${TELEGRAM_API_KEY}

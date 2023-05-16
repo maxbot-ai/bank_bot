@@ -1,0 +1,66 @@
+{% macro cc_reward_response(cc_subtype) %}
+
+    {% if cc_subtype == 'travel' %}
+        {% set card_name = 'Travel Rewards' %}
+
+    {% elif cc_subtype == 'cash' %}
+        {% set card_name = 'Cash Rewards' %}
+
+    {% elif cc_subtype == 'rewards_points' %}
+        {% set card_name = 'Rewards Points' %}
+
+    {% endif %}
+
+    Great! <br />
+    Here is the {{ card_name }} credit card best suited to your needs.<br />
+    $150 online cash rewards bonus offer :)
+
+{% endmacro %}
+
+
+{% macro cc_cash_response(cc_subtype, credit_level) %}
+
+    Great! <br />
+    {% if not cc_subtype or cc_subtype == 'unused' %}
+        Here is the credit card best suited to helping you build credit.
+    {% elif cc_subtype == 'travel' %}
+        Here is the Credit Saver Travel Rewards credit card best suited to your needs.<br />
+        Travel Rewards!
+        $150 online cash rewards bonus offer :)
+    {% elif cc_subtype == 'cash' %}
+        Here is the Credit Saver Cash Rewards credit card best suited to your needs.<br />
+        The Ultimate Cash Back Card!<br />
+        Get the most cash back for your purchases.
+    {% elif cc_subtype == 'rewards_points' %}
+        Here is the Credit Saver Rewards Points credit card best suited to your needs.<br />
+        The Balanced Rewards Card!<br />
+        Just the right amount of all rewards.
+    {% endif %}
+     <br />Mega Credit Card!<br />
+    For users with {{ credit_level }} credit.
+
+{% endmacro %}
+
+
+{% macro cc_saving_response(cc_subtype) %}
+
+    Great! <br />
+    {% if not cc_subtype or cc_subtype == 'unused' %}
+        Here is the Low Interest credit card best suited to your needs!
+    {% elif cc_subtype == 'travel' %}
+        Here is the Low Rate Travel credit card best suited to your needs.<br />
+        Travel Rewards!<br />
+        $150 online cash rewards bonus offer :)
+    {% elif cc_subtype == 'cash' %}
+        Here is the Low Rate Cash Rewards credit card best suited to your needs.<br />
+        The Ultimate Cash Back Card!<br />
+        Get the most cash back for your purchases :)
+    {% elif cc_subtype == 'rewards_points' %}
+        Here is the Low Rate Rewards Points credit card best suited to your needs.<br />
+        The Balanced Rewards Card!<br />
+        Just the right amount of all rewards :)
+    {% endif %}
+     <br />The Mega Saver!<br />
+    Save on interest to help pay down your balance faster!
+
+{% endmacro %}

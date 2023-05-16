@@ -1,0 +1,7 @@
+.env
+
+/.config/
+/rasa/.rasa/
+/rasa/models/
+
+__pycache__/

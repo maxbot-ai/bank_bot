@@ -1,0 +1,135 @@
+name: cc_making_payment
+nodes:
+  - condition: intents.show_cards_info
+    response: |
+      {% if profile.cards.items() %}
+        Current cards limits:
+
+      {% else %}
+        ❗No cards founds :(
+
+      {% endif %}
+
+      {% for number, card in profile.cards.items() %}
+        Card #{{ card.number }}
+        Minimal payment: ${{ card.min_payment }}
+        Due date: {{ card.due|format_date }}
+
+      {% endfor %}
+
+      <jump_to node="main_menu" transition="response" />
+
+  - condition: intents.billing_payment_enquiry or intents.billing_making_payments
+    label: billing_payment
+    slot_filling:
+    - name: card_number
+      check_for: entities.card_number and (slot_in_focus or not slots.card_number)
+      value: entities.card_number.value|int
+      prompt: |
+        <quick_replies>
+          <text>
+            I can help you with credit card payments. <br />
+            Please select which credit card account you'd like to pay.
+          </text>
+          {% for cc_num in profile.cards.keys() %}
+            <button>Card #{{ cc_num }}</button>
+          {% endfor %}
+        </quick_replies>
+
+      found: |
+        {% if not profile.is_my_card(slots.card_number) %}
+          ❗Card #{{ slots.card_number }} not found. Try again.
+          {% delete slots.card_number %}
+          <prompt_again />
+
+        {% else %}
+          {% set slots.card_selected = slots.card_number %}
+          Great, card is #{{ slots.card_number }}.
+
+        {% endif %}
+
+    - name: date
+      check_for: entities.date
+      value: (entities.date.value|datetime).isoformat()
+      prompt: |
+        <quick_replies>
+          <text>
+            Your payment for credit card #{{ slots.card_number}}
+            is due on {{ profile.cards[slots.card_selected].due|format_date }}.<br />
+            You can choose one of the options below, or enter your preferred payment date.
+          </text>
+          <button>Today</button>
+          <button>Tomorrow</button>
+        </quick_replies>
+      found: |
+        {% if not profile.check_payment_date(slots.card_selected, slots.date|datetime) %}
+
+          {% delete slots.date  %}
+            ❗The date must be greater or equal than the current date and less than the due date.
+            <prompt_again />
+
+        {% else %}
+          Okay, {{ slots.date|format_date }}!
+
+        {% endif %}
+
+    - name: payment_amount
+      check_for: entities.number and slot_in_focus
+      value: entities.number
+      prompt: |
+        Your minimum payment for credit card #{{ slots.card_number }}<br />
+        is ${{ profile.cards[slots.card_number].min_payment }}.<br />
+        Your balance is ${{ profile.balance }}.
+
+        How much would you like to pay on your credit card?
+      found: |
+        {% if not profile.check_payment_amount(slots.card_selected, slots.payment_amount) %}
+          {% delete slots.payment_amount %}
+            ❗The payment sum must be greater than minimal card payment and less than your balance.
+            <prompt_again />
+        {% endif %}
+
+    - name: confirmation
+      check_for: slot_in_focus and (intents.yes or intents.no)
+      prompt: |
+        <quick_replies>
+          <text>
+            Okay, we'll make a payment of ${{ slots.payment_amount }} on
+            {{ slots.date|format_date }} to credit card #{{ slots.card_number }}.
+            <br />
+            Is this information correct?
+          </text>
+          <button>Yes</button>
+          <button>No</button>
+        </quick_replies>
+      found: |
+        {% if intents.no %}
+          Sure, we can try again.
+
+          {% delete slots.card_number %}
+          {% delete slots.date  %}
+          {% delete slots.payment_amount  %}
+          {% delete slots.confirmation %}
+
+        {% elif intents.yes %}
+          {% set user.result = profile.make_payment(slots.card_selected, slots.date|datetime, slots.payment_amount) %}
+
+        {% endif %}
+
+    slot_handlers:
+      - condition: intents.cancel
+        response: |
+          {% set slots.canceled = true %}
+          ❗Ok, we'll stop there. No payment will be made."
+          <response />
+
+    response: |
+        {% if slots.confirmation %}
+          ✅Thank you for your payment. Your statement balance has been updated.<br />
+          Remaining Statement Balance ${{ profile.balance }}<br /><br />
+
+          Account ending #{{ slots.card_number }}<br />
+          Recent payments ${{ slots.payment_amount }}
+        {% endif %}
+
+        <jump_to node="main_menu" transition="response" />

@@ -1,0 +1,16 @@
+name: welcome
+nodes:
+  - condition: intents.help_agent_capabilities or intents.general_conversation_greetings
+    response: |
+      Hello, I am the bank's Virtual Agent.
+      <jump_to node="main_menu" transition="response" />
+
+  - condition: false
+    label: main_menu
+    response: |
+      <quick_replies>
+        <text>I can help you with a number of banking tasks:</text>
+        <button>Making a credit card payment</button>
+        <button>Booking an appointment with a banker</button>
+        <button>Choosing a credit card</button>
+      </quick_replies>

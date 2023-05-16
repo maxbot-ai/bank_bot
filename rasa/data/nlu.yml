@@ -1,0 +1,630 @@
+version: "3.1"
+
+nlu:
+- intent: "yes"
+  examples: |
+    - "Yes"
+    - Sure
+    - I'd like that
+    - Please do
+    - Yes please
+    - Ok
+    - That sounds good
+
+- intent: "no"
+  examples: |
+    - "No"
+    - No thanks
+    - Please don't
+    - Please do not
+    - That's not what I want at all
+    - Absolutely not
+    - No way
+
+- intent: help_agent_capabilities
+  examples: |
+    - what do you know
+    - what can you talk about
+    - what can you answer
+    - are you a real person
+    - what information do you know
+    - are you real
+    - what are you
+    - do you know about
+    - can you help me with
+    - what can you help with
+    - what can you do
+
+- intent: cancel
+  examples: |
+    - stop
+    - cancel
+    - end this
+    - stop playing
+    - please cancel
+    - end this please
+    - I want to end now
+    - I want you to stop this
+    - I do not want to do this
+
+- intent: go_back
+  examples: |
+    - Go back
+    - go baclk
+    - Can I go back
+    - i want to change the previous answer
+    - I want to go back
+    - take a step back
+    - i changed my mind
+    - can i change my answer
+    - can i change what I just said
+    - can we go to the previous step
+    - can i go back one step
+    - I want to go back to the last question
+    - can i change the answer I just gave
+
+- intent: banking_card_selection
+  examples: |
+    - can you help me choose a credit card
+    - enquire about your available credit cards
+    - What types of credit cards do you have?
+    - credit cards i want to know some more details
+    - do you have many credit cards
+    - Which credit card is right for me?
+    - choose a new credit card
+    - Can I ask about your available credit cards
+    - I'm interested in your credit cards
+    - what makes yours the best credit card
+    - Tell me about your credit cards
+    - what are the different kinds of credit cards
+    - which credit cards are available
+    - what type of credit cards do you offer
+    - why should I choose your credit card
+    - What are the features of the credit cards?
+    - what is your range of credit cards
+    - what do you know about cards
+    - are your credit cards any good
+    - can you give me information about credit cards
+    - what are the features of credit cards
+    - what are your details on credit cards
+    - do you have credit cards
+    - I want a credit card
+    - would like to talk about credit cards
+    - difference between the credit cards
+    - comparison of credit cards
+    - choose a credit card
+    - credit card should I get
+    - credit card comparison
+    - looking to see if you have a credit card that compares to the other bank
+    - do you have a credit card for students
+    - which credit card will be suitable
+    - help me select a credit card
+    - Why should I choose your credit cards?
+    - i want to learn about credit cards
+    - do you have more credit cards
+    - which credit cards does your bank have
+    - which credit cards does your bank offer?
+    - tell me about your different credit cards
+    - what type of credit cards to you offer
+    - What credit cards does your bank have?
+    - Credit card to build credit
+    - Credit card with rewards
+    - Credit card to help me save money
+    - Credit card with cash rewards for medium credit level
+    - Create card with [cash](cc_subtype) [rewards](cc_type) for [medium](cc_credit_level)
+    - Create card with [cash back](cc_subtype) [build credit](cc_type) for [bad](cc_credit_level)
+
+- intent: help_guidance_requested
+  examples: |
+    - what do I do
+    - I don't know what to do
+    - now what
+    - tell me what to do
+    - is that it?
+    - what happens next
+    - what happens now
+    - This is confused
+    - what now
+    - tell me what I type here
+    - I'm lost
+    - I'm confused now
+    - I'm confused here
+    - what next
+    - what's next
+
+- intent: make_appointment
+  examples: |
+    - schedule a booking
+    - make an appointment
+    - schedule an appointment
+    - make a booking
+    - set up an appointment
+    - you squeeze me in
+    - when could i come in
+    - I want to book an appointment
+    - are you free
+    - are you able to squeeze me in
+    - can i come in tomorrow
+    - do you have a free slot
+    - what is the availability
+    - make an appointment in bank [88866](zip)
+    - make a booking near [88855](zip)
+
+- intent: billing_payment_enquiry
+  examples: |
+    - help me with my cc bill
+    - can you help me with my credit card bill
+    - I would like to address my credit card payment.
+    - what can I do about my credit card payment
+    - what's with my credit card payment
+    - Can I ask about my credit card payment
+    - can you help me with my credit card payment
+    - credit card payment
+    - credit card payment I have a question
+    - my credit card payment
+    - do you know about my credit card payment
+
+- intent: billing_making_payments
+  examples: |
+    - make a cc repayment
+    - Can I make the monthly payment on my credit card
+    - how can i make credit card repayments
+    - make a credit card payment
+    - How do I make payments on my credit card?
+    - How do I put money on to my credit card?
+    - how do i pay off my card
+    - pay my credit card here
+    - credit card repayment
+    - credit card repayment tomorrow
+    - can I make repayments to my credit card
+    - make a cc payment
+    - how can i make payments to my credit card
+    - make repayments to my credit card
+    - pay credit card tomorrow
+    - pay off my credit card
+
+- intent: show_cards_info
+  examples: |
+    - show cards info
+    - cards limits
+    - cards info
+    - show cards info for [1234](card_number)
+    - what with my credit card with [9999](card_number) number
+
+- intent: general_conversation_greetings
+  examples: |
+    - good evening
+    - what is up
+    - wassup
+    - what's up
+    - hi there
+    - hello
+    - and helllo to you
+    - good afternoon
+    - greetings
+    - good morning
+
+- synonym: rewards
+  examples: |
+    - rewards
+    - prize
+    - points
+    - travelling
+    - gives discounts
+    - benefits
+    - give me something in return
+    - provide bonuses
+    - frequent flyer
+    - traveler miles
+    - cashback
+    - cash back
+    - gives me bonuses
+    - cash
+    - like rewards
+    - money back
+
+- synonym: build_credit
+  examples: |
+    - build_credit
+    - increase credit score
+    - help my credit
+    - build credit
+    - better credit score
+    - increase my credit
+    - improve my credit
+    - get better credit
+    - improve line of credit
+    - better line of credit
+    - get out of the credit hole
+    - help with my credit
+    - my credit
+    - credit line
+    - line of credit
+    - improve credit score
+    - get a better credit
+    - increase my credit score
+    - increase the credit score
+    - credit is really low
+    - credit is low
+    - low credit
+    - credit too low
+    - credit not high
+    - credit score is low
+    - credit score is not high
+    - credit is rubbish
+    - rubbish credit
+    - like to increase credit
+
+- synonym: saving
+  examples: |
+    - saving
+    - low interest
+    - no fee
+    - no fees
+    - cheap fee
+    - no annual fee
+    - small interest
+    - help me save
+    - want to save
+    - savings
+    - save money
+    - cheap card
+    - lowest APR
+    - cheapest APR
+    - lowest annual percentage rate
+    - cheapest annual percentage rate
+    - smallest APR
+    - smallest annual percentage rate
+    - least APR
+    - least annual percentage rate
+    - smallest interest rate
+    - least interest rate
+    - lower interest rate
+    - lowest fees
+    - low fee
+    - lowest fee
+    - like saving
+    - low payment
+    - low payments
+    - smallest payments
+    - smallest fee
+    - lowest payments
+
+- lookup: cc_type
+  examples: |
+    - rewards
+    - prize
+    - points
+    - travelling
+    - gives discounts
+    - benefits
+    - give me something in return
+    - provide bonuses
+    - frequent flyer
+    - traveler miles
+    - cashback
+    - cash back
+    - gives me bonuses
+    - cash
+    - like rewards
+    - money back
+    - build_credit
+    - increase credit score
+    - help my credit
+    - build credit
+    - better credit score
+    - increase my credit
+    - improve my credit
+    - get better credit
+    - improve line of credit
+    - better line of credit
+    - get out of the credit hole
+    - help with my credit
+    - my credit
+    - credit line
+    - line of credit
+    - improve credit score
+    - get a better credit
+    - increase my credit score
+    - increase the credit score
+    - credit is really low
+    - credit is low
+    - low credit
+    - credit too low
+    - credit not high
+    - credit score is low
+    - credit score is not high
+    - credit is rubbish
+    - rubbish credit
+    - like to increase credit
+    - saving
+    - low interest
+    - no fee
+    - no fees
+    - cheap fee
+    - no annual fee
+    - small interest
+    - help me save
+    - want to save
+    - savings
+    - save money
+    - cheap card
+    - lowest APR
+    - cheapest APR
+    - lowest annual percentage rate
+    - cheapest annual percentage rate
+    - smallest APR
+    - smallest annual percentage rate
+    - least APR
+    - least annual percentage rate
+    - smallest interest rate
+    - least interest rate
+    - lower interest rate
+    - lowest fees
+    - low fee
+    - lowest fee
+    - like saving
+    - low payment
+    - low payments
+    - smallest payments
+    - smallest fee
+    - lowest payments
+
+- synonym: rewards_points
+  examples: |
+    - rewards_points
+    - rewards points
+    - general points
+    - general rewards
+    - spend rewards on what I
+    - get rewards to spend myself
+    - get discounts
+    - get to spend it wherever I
+    - general wards
+    - any rewards
+    - just rewards
+    - loyalty points
+    - loyalty rewards
+    - points
+    - loyalty
+
+- synonym: cash
+  examples: |
+    - cash
+    - cash rewards
+    - cash back
+    - money
+    - cashback
+    - cash returns
+    - cash returned
+    - cash return
+    - money back
+    - money returns
+    - money return
+    - money rewards
+    - monetary rewards
+    - money reward
+    - monetary reward
+    - money returned
+    - moneyback
+
+- synonym: travel
+  examples: |
+    - travel
+    - travel rewards
+    - miles points
+    - travel points
+    - am a frequent flyer
+    - we travel often
+    - always travel
+    - I fly around the
+    - miles rewards
+    - flyer miles
+    - holiday
+    - holidays
+    - on a break
+    - for a break
+    - travel for
+    - spring break
+    - summer break
+    - getaway
+    - a get away
+    - winter break
+    - fall break
+    - autumn break
+    - go on breaks
+    - weekend stays
+    - miles
+    - air miles
+    - airmiles
+
+- lookup: cc_subtype
+  examples: |
+    - rewards_points
+    - general points
+    - general rewards
+    - spend rewards on what I
+    - get rewards to spend myself
+    - get discounts
+    - get to spend it wherever I
+    - general wards
+    - any rewards
+    - just rewards
+    - loyalty points
+    - loyalty rewards
+    - points
+    - loyalty
+    - cash
+    - cash rewards
+    - cash back
+    - money
+    - cashback
+    - cash returns
+    - cash returned
+    - cash return
+    - money back
+    - money returns
+    - money return
+    - money rewards
+    - monetary rewards
+    - money reward
+    - monetary reward
+    - money returned
+    - moneyback
+    - travel
+    - travel rewards
+    - miles points
+    - travel points
+    - am a frequent flyer
+    - we travel often
+    - always travel
+    - I fly around the
+    - miles rewards
+    - flyer miles
+    - holiday
+    - holidays
+    - on a break
+    - for a break
+    - travel for
+    - spring break
+    - summer break
+    - getaway
+    - a get away
+    - winter break
+    - fall break
+    - autumn break
+    - go on breaks
+    - weekend stays
+    - miles
+    - air miles
+    - airmiles
+
+- synonym: low
+  examples: |
+    - low
+    - less than 600
+    - bad
+    - poor
+    - not great
+    - dismal
+    - shocking
+    - worst
+    - lowest
+    - very bad
+    - non-existent
+    - rubbish
+    - trash
+    - super bad
+    - awesomely bad
+    - not super
+    - not awesome
+    - crappy
+    - crap
+    - non existent
+    - non-existant
+    - non existant
+    - zero
+    - lousy
+    - not good
+
+- synonym: average
+  examples: |
+    - average
+    - middle
+    - good
+    - decent
+    - under 700
+    - between 600 and 700
+    - okay
+    - not too bad
+    - pretty good
+    - medium
+    - so so
+    - middling
+    - not good or bad
+    - not bad or good
+    - not bad
+
+- synonym: high
+  examples: |
+    - high
+    - great
+    - very good
+    - excellent
+    - highest score
+    - over 700
+    - best there is
+    - amazing
+    - through the roof
+    - the highest
+    - the best
+    - awesome
+    - super
+    - fantastic
+    - none better
+
+- lookup: cc_credit_level
+  examples: |
+    - low
+    - less than 600
+    - bad
+    - poor
+    - not great
+    - dismal
+    - shocking
+    - worst
+    - lowest
+    - very bad
+    - non-existent
+    - rubbish
+    - trash
+    - super bad
+    - awesomely bad
+    - not super
+    - not awesome
+    - crappy
+    - crap
+    - non existent
+    - non-existant
+    - non existant
+    - zero
+    - lousy
+    - not good
+    - average
+    - middle
+    - good
+    - decent
+    - under 700
+    - between 600 and 700
+    - okay
+    - not too bad
+    - pretty good
+    - medium
+    - so so
+    - middling
+    - not good or bad
+    - not bad or good
+    - not bad
+    - high
+    - great
+    - very good
+    - excellent
+    - highest score
+    - over 700
+    - best there is
+    - amazing
+    - through the roof
+    - the highest
+    - the best
+    - awesome
+    - super
+    - fantastic
+    - none better
+
+- regex: zip
+  examples: |
+    - \d{5}
+
+- regex: card_number
+  examples: |
+    - \d{4}

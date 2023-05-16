@@ -1,0 +1,136 @@
+name: booking
+nodes:
+  - condition: intents.make_appointment
+    label: make_appointment
+    slot_filling:
+    - name: init
+      check_for: slots.slots_order is undefined
+      found: |
+        {% set slots.slots_order = [] %}
+
+    - name: date
+      check_for: entities.date
+      prompt: |
+        I can help you schedule an appointment with one of our bankers.
+        We need 24 hours notice for an appointment, the earliest would be tomorrow.
+        <br /><br />
+        Which date would be best for you?
+
+      found: |
+        {% set slots.slots_order = slots.slots_order + ["date"] %}
+        {% if not entities.time and not entities.zip%}
+          Great, Date is {{ slots.date }}.
+        {% endif %}
+
+    - name: time
+      check_for: entities.time
+      prompt: "What time would you like to meet with our banker?"
+      found: |
+        {% set slots.slots_order = slots.slots_order + ["time"] %}
+        {% if not entities.date and not entities.zip %}
+          Ok, time is {{ slots.time }}.
+        {% endif %}
+
+    - name: zip
+      check_for: entities.zip
+      value: entities.zip.literal
+      prompt: |
+          Let's find your closest branch. What is your zip code?
+
+      found: |
+        {% set slots.slots_order = slots.slots_order + ["zip"] %}
+
+        {% if not entities.date and not entities.time %}
+          Ok, zip is {{ slots.zip }}.
+        {% endif %}
+
+        {% if slots.zip|int % 2 == 0 %}
+          {% set slots.ask_changing_zip = 'not_used' %}
+        {% else %}
+          {% delete slots.ask_changing_zip %}
+              Sorry. I don't found bank branches nearby.
+        {% endif %}
+
+    - name: ask_changing_zip
+      check_for: slot_in_focus and (intents.yes or intents.no)
+      value: true
+      prompt: "Do you want to change zip code?"
+
+      found: |
+        {% if intents.yes %}
+          {% delete slots.zip %}
+          Alright. Let's start over.
+        {% elif intents.no %}
+          {% set slots.bank_branches_not_found = true %}
+          <response />
+        {% endif %}
+
+    - name: bank_branch
+      check_for: slot_in_focus and entities.number
+      value: entities.number.value|int
+
+      prompt: |
+        <image url="https://raw.githubusercontent.com/maxbot-ai/misc/main/banks_map.jpg">
+          <caption>I found 5 nearby bank branches. Which one would you like to go to?</caption>
+        </image>
+      found: |
+        {% if slots.bank_branch < 1 or slots.bank_branch > 5 %}
+          I'm sorry but that's not a valid option.
+          <prompt_again />
+        {% else %}
+          {% set slots.slots_order = slots.slots_order + ["bank_branch"] %}
+          Okay, location {{ slots.bank_branch }} on the list.
+        {% endif %}
+
+    - name: comment
+      check_for: slot_in_focus and message.text and not (intents.cancel or intents.go_back)
+      value: message.text
+      prompt: |
+        We have a banker available for {{ slots.date|format_date }}, at {{ slots.time|format_time }}.
+        <br /><br />
+        In a few words, can you tell me what is the purpose of the appointment?
+    slot_handlers:
+      - condition: intents.cancel
+        response: |
+            {% set slots.canceled = true %}
+            Ok, we'll stop there. No appointment will be made.
+            <response />
+      - condition: intents.go_back
+        response: |
+          {% if slots.slots_order %}
+            {% set last = slots.slots_order.pop() %}
+          {% endif %}
+
+          {% if not last or last == 'date' %}
+            {% delete slots.date %}
+            We're at the start of this process. Let's find a date that suits you.
+
+          {% elif last == 'time' %}
+            {% delete slots.time %}
+            Okay, let's go back a step and find a time that suits you.
+
+          {% elif last == 'zip' %}
+            {% delete slots.zip %}
+            Okay, let's go back a step and find a zip that suits you.
+
+          {% elif last == 'bank_branch' %}
+            {% delete slots.bank_branch %}
+            Okay, let's go back a step and find a bank branche that suits you.
+
+          {% endif %}
+
+    response: |
+      {% if slots.canceled %}
+        {# do nothing #}
+
+      {% elif slots.bank_branches_not_found %}
+        Okay, may be in future we will have branch nearby your zip code ({{ slots.zip }}).
+
+      {% else %}
+        ✅Okay your appointment is confirmed. Here is your reminder.
+        <br /><br />
+        Local Bank, 132 14th Ave. Local Town, {{ slots.zip }}
+        {{ slots.date|format_date }}, at {{ slots.time|format_time }} With Emma Banker
+        Purpose: {{ slots.comment }}
+      {% endif %}
+      <jump_to node="main_menu" transition="response"/>

@@ -1,0 +1,53 @@
+[tool.poetry]
+name = "bank_bot"
+version = "0.1.0"
+description = "Maxbot bank bot example"
+authors = ["Maxbot Team <hello@midvix.ai>"]
+readme = "README.md"
+packages = [{include = "bank_bot"}]
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.10"
+maxbot = "^0.1.0b2"
+boto3 = "^1.26.124"
+rasa = "^3.5.6"
+
+[tool.poetry.plugins.maxbot_extensions]
+quick_replies = "bank_bot.extensions:quick_replies_extension"
+
+[tool.poetry.dev-dependencies]
+pytest = "^7.2.1"
+black = "^22.3.0"
+pylint = "^2.13.9"
+isort = "^5.10.1"
+pre-commit = "^2.19.0"
+bandit = "^1.7.4"
+flake8 = "^4.0.1"
+flake8-docstrings = "^1.6.0"
+flake8-bugbear = "^22.9.23"
+flake8-eradicate = "^1.4.0"
+flake8-print = "^5.0.0"
+pep8-naming = "^0.13.2"
+pytest-cov = "^3.0.0"
+
+[tool.black]
+line-length = 99
+target-version = ["py39"]
+
+[tool.pylint.'MESSAGES CONTROL']
+profile = "black"
+disable = ["C0330", "C0114", "C0116"]
+max-line-length = 99
+
+[tool.isort]  # black config
+profile = "black"
+line_length = 99
+
+[tool.bandit]
+targets = ["bank_bot",]
+exclude_dirs = ["tests", "rasa"]
+skips = ["B101",]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

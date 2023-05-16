@@ -1,0 +1,12 @@
+name: fallback
+nodes:
+  - condition: digressing
+    label: everything_else_in_digressing
+    response: |
+        ❗I'm having some trouble understanding what you mean. Rephrase, please!
+
+  - condition: true
+    label: everything_else
+    response: |
+        ❗Sorry. I don't get it. Please rephrase!
+        <jump_to node="main_menu" transition="response"/>
