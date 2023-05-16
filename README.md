@@ -75,11 +75,9 @@ Also note, that current version of Maxbot requires python 3.9.
 1. Clone this repository and change current directory
 
 ```
-$ git clone <path_to_repository>
+$ git clone git@github.com:maxbot-ai/bank_bot.git
 $ cd bank_bot
 ```
-
-TODO: update repository path after release.
 
 2. Install the dependencies
 
@@ -438,19 +436,18 @@ In our case the macros are located in the file `cc_choosing.jinja` in the catalo
 ## Using internal extensions
 
 The Maxbot library contains several internal extensions that simplify writing scenarios.
-The list of extensions you can find in the catalogue `./maxbot/extensions` (TODO: add link to github).
+The list of extensions you can find in the catalogue [./maxbot/extensions](https://github.com/maxbot-ai/maxbot/tree/main/maxbot/extensions).
 
 ```
 $ tree
 .
 ├── __init__.py
+├── _manager.py
 ├── datetime.py
 ├── format.py
 ├── jinja_loader.py
 ├── rasa.py
-├── rest.py
-└── strict_undefined.py
-
+└── rest.py
 ```
 
 In the example we use filters `format_date` and `format_time` from the module `format.py` to format the date and time respectively. And a filter `datetime` from the module `datetime` to convert the string into an object `datetime`.
