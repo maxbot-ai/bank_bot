@@ -3,9 +3,8 @@
 # Table of contents
 - [Bot features](#bot-features)
 - [Prerequisites](#prerequisites)
-- [Configuring the application](#configuring-the-application)
 - [Running locally](#running-locally)
-- [Technical aspects and implementation details](#technical-aspects)
+- [Technical aspects and implementation details](#technical-aspects-and-implementation-details)
 
 ## Bot features:
 
