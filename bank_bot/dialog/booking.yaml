@@ -46,9 +46,11 @@ nodes:
 
         {% if slots.zip|int % 2 == 0 %}
           {% set slots.ask_changing_zip = 'not_used' %}
+
         {% else %}
           {% delete slots.ask_changing_zip %}
-              Sorry. I don't found bank branches nearby.
+          Sorry. I don't found bank branches nearby.
+
         {% endif %}
 
     - name: ask_changing_zip
@@ -60,9 +62,11 @@ nodes:
         {% if intents.yes %}
           {% delete slots.zip %}
           Alright. Let's start over.
+
         {% elif intents.no %}
           {% set slots.bank_branches_not_found = true %}
           <response />
+
         {% endif %}
 
     - name: bank_branch
@@ -77,9 +81,11 @@ nodes:
         {% if slots.bank_branch < 1 or slots.bank_branch > 5 %}
           I'm sorry but that's not a valid option.
           <prompt_again />
+
         {% else %}
           {% set slots.slots_order = slots.slots_order + ["bank_branch"] %}
           Okay, location {{ slots.bank_branch }} on the list.
+
         {% endif %}
 
     - name: comment
@@ -92,9 +98,9 @@ nodes:
     slot_handlers:
       - condition: intents.cancel
         response: |
-            {% set slots.canceled = true %}
-            Ok, we'll stop there. No appointment will be made.
-            <response />
+          {% set slots.canceled = true %}
+          Ok, we'll stop there. No appointment will be made.
+          <response />
       - condition: intents.go_back
         response: |
           {% if slots.slots_order %}

@@ -9,7 +9,8 @@ nodes:
     label: main_menu
     response: |
       <quick_replies>
-        <text>I can help you with a number of banking tasks:</text>
+        <text>I can help you with a number of banking tasks</text>
+
         <button>Making a credit card payment</button>
         <button>Booking an appointment with a banker</button>
         <button>Choosing a credit card</button>

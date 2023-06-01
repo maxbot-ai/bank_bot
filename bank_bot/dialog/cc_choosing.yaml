@@ -7,12 +7,16 @@ nodes:
       check_for: slot_in_focus and entities.cc_type
       value: entities.cc_type.value|lower
       prompt: |
-        I can help you find a credit card to suit your needs.<br />
-        We have credit cards to build credit, provide rewards,<br />
-        and help you save money.
 
         <quick_replies>
-          <text>What are you looking for most in a credit card?</text>
+          <text>
+            I can help you find a credit card to suit your needs.
+            We have credit cards to build credit, provide rewards,
+            and help you save money.<br /><br />
+
+            What are you looking for most in a credit card?
+          </text>
+
           <button>Rewards</button>
           <button>Increase credit score</button>
           <button>Save money</button>

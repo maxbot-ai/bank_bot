@@ -66,7 +66,10 @@ The bank is more interested in issuing cards with a cashback. That is why the Bo
 
 3. Obtain your bot token in [Telegram](https://core.telegram.org/bots/tutorial#obtain-your-bot-token).
 
-Also note, that current version of Maxbot requires python 3.9.
+Maxbot is compatible with 64-bit Python versions 3.9 – 3.11 and runs on Unix/Linux, macOS/OS X and Windows.
+
+But the `bank_bot example` depends on the [RASA](https://pypi.org/project/rasa/) package which does not support Python 3.11.
+So you need Python 3.9 or 3.10 to run the example.
 
 
 # Running locally
@@ -240,10 +243,9 @@ Open the file `bot.yaml` and make sure that the settings are correct (note, that
 ```
 extensions:
   quick_replies: {}
-  format:
+  babel:
     locale: en_US
-  datetime:
-    tz: America/New_York
+  datetime: {}
   jinja_loader: {}
   rasa:
     url: http://0.0.0.0:5005

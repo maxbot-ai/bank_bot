@@ -1,9 +1,8 @@
 extensions:
   quick_replies: {}
-  format:
+  babel:
     locale: en_US
-  datetime:
-    tz: America/New_York
+  datetime: {}
   jinja_loader: {}
   rasa:
     url: http://0.0.0.0:5005

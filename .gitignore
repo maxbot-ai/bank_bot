@@ -1,4 +1,5 @@
 .env
+poetry.lock
 
 /.config/
 /rasa/.rasa/

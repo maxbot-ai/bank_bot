@@ -7,10 +7,10 @@ readme = "README.md"
 packages = [{include = "bank_bot"}]
 
 [tool.poetry.dependencies]
-python = ">=3.9,<3.10"
-maxbot = "^0.1.0b2"
+python = ">=3.9,<3.11"
 boto3 = "^1.26.124"
 rasa = "^3.5.6"
+maxbot = "^0.2.0b2"
 
 [tool.poetry.plugins.maxbot_extensions]
 quick_replies = "bank_bot.extensions:quick_replies_extension"

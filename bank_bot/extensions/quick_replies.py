@@ -1,6 +1,7 @@
 """Quick replies implementation for Telegram channel."""
 
 from marshmallow import Schema, fields
+from maxbot.maxml import markup
 from telegram import KeyboardButton, ReplyKeyboardMarkup
 
 
@@ -8,7 +9,7 @@ class QuickRepliesCommand(Schema):
     """Text message with button list."""
 
     # Text message sent to the user along with the button list.
-    text = fields.String(required=True, metadata={"maxml": "element"})
+    text = markup.Field(required=True, metadata={"maxml": "element"})
 
     # Button titles to be sent to the user.
     button = fields.List(fields.String)
@@ -17,7 +18,7 @@ class QuickRepliesCommand(Schema):
     input_field_placeholder = fields.String(required=False)
 
     # Requests clients to hide the keyboard as soon as it's been used.
-    one_time_keyboard = fields.Bool(required=False, missing=True)
+    one_time_keyboard = fields.Bool(required=False, missing=True, default=True)
 
 
 class QuickRepliesExtension:
@@ -35,7 +36,7 @@ class QuickRepliesExtension:
         keyboard = [[KeyboardButton(text)] for text in command["quick_replies"]["button"]]
         await self.bot.send_message(
             dialog["user_id"],
-            text=command["quick_replies"]["text"],
+            text=command["quick_replies"]["text"].render(),
             reply_markup=ReplyKeyboardMarkup(
                 keyboard,
                 resize_keyboard=True,

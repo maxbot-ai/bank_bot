@@ -3,18 +3,17 @@ nodes:
   - condition: intents.show_cards_info
     response: |
       {% if profile.cards.items() %}
-        Current cards limits:
+        Current cards limits:<br />
 
       {% else %}
         ❗No cards founds :(
-
       {% endif %}
 
       {% for number, card in profile.cards.items() %}
         Card #{{ card.number }}
         Minimal payment: ${{ card.min_payment }}
         Due date: {{ card.due|format_date }}
-
+        <br />
       {% endfor %}
 
       <jump_to node="main_menu" transition="response" />
@@ -31,21 +30,23 @@ nodes:
             I can help you with credit card payments. <br />
             Please select which credit card account you'd like to pay.
           </text>
+
           {% for cc_num in profile.cards.keys() %}
             <button>Card #{{ cc_num }}</button>
           {% endfor %}
+
         </quick_replies>
 
       found: |
         {% if not profile.is_my_card(slots.card_number) %}
           ❗Card #{{ slots.card_number }} not found. Try again.
+
           {% delete slots.card_number %}
           <prompt_again />
 
         {% else %}
           {% set slots.card_selected = slots.card_number %}
           Great, card is #{{ slots.card_number }}.
-
         {% endif %}
 
     - name: date
@@ -58,6 +59,7 @@ nodes:
             is due on {{ profile.cards[slots.card_selected].due|format_date }}.<br />
             You can choose one of the options below, or enter your preferred payment date.
           </text>
+
           <button>Today</button>
           <button>Tomorrow</button>
         </quick_replies>
@@ -65,8 +67,8 @@ nodes:
         {% if not profile.check_payment_date(slots.card_selected, slots.date|datetime) %}
 
           {% delete slots.date  %}
-            ❗The date must be greater or equal than the current date and less than the due date.
-            <prompt_again />
+          ❗The date must be greater or equal than the current date and less than the due date.
+          <prompt_again />
 
         {% else %}
           Okay, {{ slots.date|format_date }}!
@@ -79,7 +81,7 @@ nodes:
       prompt: |
         Your minimum payment for credit card #{{ slots.card_number }}<br />
         is ${{ profile.cards[slots.card_number].min_payment }}.<br />
-        Your balance is ${{ profile.balance }}.
+        Your balance is ${{ profile.balance }}.<br />
 
         How much would you like to pay on your credit card?
       found: |
@@ -99,6 +101,7 @@ nodes:
             <br />
             Is this information correct?
           </text>
+
           <button>Yes</button>
           <button>No</button>
         </quick_replies>
